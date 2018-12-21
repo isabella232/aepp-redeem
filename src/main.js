@@ -13,14 +13,14 @@ import '@aeternity/aepp-components/dist/aepp.components.css'
 import Vue from 'vue'
 
 /**
- * Importing Root View
- */
-import Views from './views'
-
-/**
  * Importing aepp-components library
  */
 import Components from '@aeternity/aepp-components'
+
+/**
+ * Importing Root View
+ */
+import View from './view'
 
 /**
  * Installing Vue Dependencies
@@ -37,5 +37,5 @@ Vue.config.productionTip = false
  * Exporting $vm instance
  */
 export default new Vue({
-  render: h => h(Views),
+  render: h => h(View),
 }).$mount('#app')
