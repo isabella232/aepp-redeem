@@ -38,4 +38,4 @@ Vue.config.productionTip = false
  */
 export default new Vue({
   render: h => h(View),
-}).$mount('#app')
+}).$mount('#view')
