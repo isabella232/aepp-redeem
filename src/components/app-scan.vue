@@ -11,8 +11,7 @@ import {
   aeEncodeKey,
   generateKeyPairFromSecret,
   hexStringToByte,
-  addressToHex,
-  decodeBase64Check
+  addressToHex
 } from '@aeternity/aepp-sdk/es/utils/crypto'
 
 export default {
@@ -33,8 +32,13 @@ export default {
       await Wallet({
         url: 'https://sdk-testnet.aepps.com',
         internalUrl: 'https://sdk-testnet.aepps.com',
-        accounts: [MemoryAccount({ keypair })],
-        address: keypair.publicKey,
+        accounts: [MemoryAccount({
+          keypair: {
+            publicKey: aeEncodeKey(keypair.publicKey),
+            secretKey: privateKey
+          }
+        })],
+        address: aeEncodeKey(keypair.publicKey), // this is AK_THE_ADDRESS
         onTx: () => {},
         onChain: () => {},
         onAccount: () => {},
@@ -46,13 +50,13 @@ export default {
           console.log(res)
 
           console.log(addressToHex('ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe'))
-          console.log(decodeBase64Check('ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe'))
+          console.log(hexStringToByte(addressToHex('ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe')))
 
-          //client
-          //.spend(res, 'ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe')
-          //.then((response) => {
-          //  console.log(response)
-          //})
+          client
+          .spend(res, 'ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe')
+          .then((response) => {
+            console.log('resp', response)
+          })
         })
       })
     },
