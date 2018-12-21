@@ -25,7 +25,17 @@
           @click="send"
           :disabled="!address"
         >
-          Redeem
+          <template v-if="!btnLoading">
+            Redeem
+          </template>
+          <template v-else>
+            <img
+              class="loading"
+              alt="Loading"
+              style="width: 22px; height: 22px;"
+              :src="require('../../assets/loader.svg')"
+            />
+          </template>
         </ae-button>
         <ae-button
           face="flat"
@@ -73,7 +83,8 @@ export default {
       scanner: false,
       balance: 0,
       client: null,
-      loading: true
+      loading: true,
+      btnLoading: false,
     }
   },
   components: {
@@ -100,19 +111,21 @@ export default {
   },
   methods: {
     send() {
+      this.btnLoading = true;
       return this.client
       .spend(
         BigNumber(this.balance).minus(20000).toString(10),
         this.address,
         { fee: 20000 }
-      ).then(
-        (tx) => this.$router.push({
+      ).then((tx) => {
+        this.btnLoading = false;
+        this.$router.push({
           name: 'status',
           params: {
             hash: tx.hash
           }
         })
-      )
+      }).catch(() => this.btnLoading = false)
     },
     cancel() {
       this.$store.commit('setPrivKey', null)
