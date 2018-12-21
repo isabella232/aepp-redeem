@@ -1,10 +1,11 @@
 <template>
   <div id="view">
-    <ae-slider :options="sliderOptions" fullscreen>
-      <redeem/>
-      <transfer/>
-      <status/>
-    </ae-slider>
+    <!--<ae-slider :options="sliderOptions" fullscreen>-->
+      <!---->
+      <!--<transfer/>-->
+      <!--<status/>-->
+    <!--</ae-slider>-->
+    <redeem/>
   </div>
 </template>
 <script>

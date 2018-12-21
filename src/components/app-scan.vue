@@ -4,21 +4,21 @@
   </div>
 </template>
 <script>
+import { QrcodeStream } from 'vue-qrcode-reader'
 import Wallet from '@aeternity/aepp-sdk/es/ae/wallet'
 import MemoryAccount from '@aeternity/aepp-sdk/es/account/memory'
-import { QrcodeStream } from 'vue-qrcode-reader'
 import {
+  aeEncodeKey,
   generateKeyPairFromSecret,
-  hexStringToByte
+  hexStringToByte,
+  addressToHex,
+  decodeBase64Check
 } from '@aeternity/aepp-sdk/es/utils/crypto'
 
 export default {
   name: 'app-scan',
   components: {
     QrcodeStream
-  },
-  data: function () {
-    return { keypair: {} }
   },
   methods: {
     async onDecode (privateKey) {
@@ -27,7 +27,8 @@ export default {
       );
 
       this.$emit('decoded', keypair)
-      Object.assign(this.$data, { keypair })
+
+      console.log(keypair)
 
       await Wallet({
         url: 'https://sdk-testnet.aepps.com',
@@ -39,8 +40,20 @@ export default {
         onAccount: () => {},
         onContract: () => {},
         networkID: 'ae_uat'
-      }).then((response) => {
-        console.log(response.Ae.getBalance())
+      }).then((client) => {
+        console.log(client)
+        client.balance(aeEncodeKey(keypair.publicKey), { format: false }).then((res) => {
+          console.log(res)
+
+          console.log(addressToHex('ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe'))
+          console.log(decodeBase64Check('ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe'))
+
+          //client
+          //.spend(res, 'ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe')
+          //.then((response) => {
+          //  console.log(response)
+          //})
+        })
       })
     },
   }
