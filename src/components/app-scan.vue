@@ -1,75 +1,93 @@
 <template>
   <div class="app-scan">
-    <qrcode-stream @decode="onDecode" />
+    <ae-button
+      fill="primary"
+      face="icon"
+      @click="$emit('close', $event)"
+    >
+      <ae-icon
+        name="close"
+      />
+    </ae-button>
+    <qrcode-stream
+      :track="false"
+      @init="onInit"
+      @decode="$emit('decoded', $event)"
+      v-show="!loading"
+    />
+    <img
+      class="loading"
+      alt="Loading"
+      :src="require('../assets/loader.svg')"
+      v-show="loading"
+    />
   </div>
 </template>
 <script>
 import { QrcodeStream } from 'vue-qrcode-reader'
-import Wallet from '@aeternity/aepp-sdk/es/ae/wallet'
-import MemoryAccount from '@aeternity/aepp-sdk/es/account/memory'
-import {
-  aeEncodeKey,
-  generateKeyPairFromSecret,
-  hexStringToByte,
-  addressToHex
-} from '@aeternity/aepp-sdk/es/utils/crypto'
+
+import AeButton from '@aeternity/aepp-components/dist/ae-button'
+import AeIcon from '@aeternity/aepp-components/dist/ae-icon'
 
 export default {
   name: 'app-scan',
+  data() {
+    return { loading: true }
+  },
   components: {
-    QrcodeStream
+    QrcodeStream,
+    AeButton,
+    AeIcon
   },
   methods: {
-    async onDecode (privateKey) {
-      const keypair = generateKeyPairFromSecret(
-        hexStringToByte(privateKey)
-      );
-
-      this.$emit('decoded', keypair)
-
-      console.log(keypair)
-
-      await Wallet({
-        url: 'https://sdk-testnet.aepps.com',
-        internalUrl: 'https://sdk-testnet.aepps.com',
-        accounts: [MemoryAccount({
-          keypair: {
-            publicKey: aeEncodeKey(keypair.publicKey),
-            secretKey: privateKey
-          }
-        })],
-        address: aeEncodeKey(keypair.publicKey), // this is AK_THE_ADDRESS
-        onTx: () => {},
-        onChain: () => {},
-        onAccount: () => {},
-        onContract: () => {},
-        networkID: 'ae_uat'
-      }).then((client) => {
-        console.log(client)
-        client.balance(aeEncodeKey(keypair.publicKey), { format: false }).then((res) => {
-          console.log(res)
-
-          console.log(addressToHex('ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe'))
-          console.log(hexStringToByte(addressToHex('ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe')))
-
-          client
-          .spend(res, 'ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe')
-          .then((response) => {
-            console.log('resp', response)
-          })
-        })
-      })
-    },
+    async onInit(promise) {
+      try {
+        await promise
+        this.loading = false;
+      } catch (error) {
+        this.$emit('error', error)
+        this.loading = true
+      } finally {
+        this.loading = false;
+      }
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
 .app-scan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
-  background: $color-white;
+  background: $color-secondary;
+  z-index: 1000;
+
+  /deep/ > .ae-button {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    z-index: 1000;
+  }
+
+  /deep/ > .qrcode-stream {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 10px 0 rgba(0, 24, 51, 0.21);
+  }
+
+  /deep/ .qrcode-stream__inner-wrapper,
+  /deep/ .qrcode-stream__overlay, .qrcode-stream__tracking-layer,
+  /deep/ .qrcode-stream__camera, .qrcode-stream__pause-frame {
+    object-fit: fill;
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
