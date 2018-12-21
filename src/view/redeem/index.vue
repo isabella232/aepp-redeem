@@ -6,7 +6,7 @@
         <span>Received a Paper Wallet?</span>
         <span>Redeem it here</span>
       </h2>
-      <h3>Scan and transfer it to your own æternity account.</h3>
+      <h3>Scan and transfer it to an æternity account.</h3>
     </div>
     <ae-button
       face="round"

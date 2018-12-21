@@ -10,7 +10,7 @@
       fill="primary"
       @click="$router.push({ name: 'redeem' })"
     >
-      Redeem another one
+      Redeem another paper wallet
     </ae-button>
   </app-panel>
 </template>

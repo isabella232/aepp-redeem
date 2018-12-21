@@ -3,14 +3,13 @@
     <template v-if="!loading">
       <div class="view-transfer-text">
         <h2>
-          <span>Your Paper Wallet </span>
-          <span>contains {{ Math.floor(balance / 1000000000000000000) }} Æ</span>
+          This paper wallet contains <span>{{ Math.floor(balance / 1000000000000000000) }} AE</span>
         </h2>
         <h3>
-          Scan and transfer it to your own <br /> æternity account (or someone else)
+          Scan and transfer it to an æternity account
         </h3>
       </div>
-      <ae-input v-model="address" label="Your Address">
+      <ae-input v-model="address" label="Address">
         <ae-toolbar align="right" slot="footer">
           <ae-button @click="scanner = true" face="toolbar">
             <ae-icon name="camera" />
@@ -180,12 +179,10 @@ export default {
 
     font-size: rem(23px);
     font-weight: 500;
+    color: $color-neutral-minimum;
 
-    span:first-child {
+    span {
       color: $color-primary;
-    }
-    span:last-child {
-      color: $color-neutral-minimum;
     }
   }
 
