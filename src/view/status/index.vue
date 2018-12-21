@@ -4,6 +4,9 @@
       <h2>
         <span>You successfully redeemed your AE!</span>
       </h2>
+      <h3>
+        Transaction hash: {{ $route.params.hash }}
+      </h3>
     </div>
     <ae-button
       face="round"
@@ -47,6 +50,14 @@ export default {
     span:last-child {
       color: $color-neutral-minimum;
     }
+  }
+
+  > h3 {
+    @extend %face-sans-base;
+
+    font-size: rem(17px);
+    color: $color-neutral-negative-2;
+    font-weight: 500;
   }
 }
 </style>
