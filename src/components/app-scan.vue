@@ -85,7 +85,7 @@ export default {
   /deep/ .qrcode-stream__inner-wrapper,
   /deep/ .qrcode-stream__overlay, .qrcode-stream__tracking-layer,
   /deep/ .qrcode-stream__camera, .qrcode-stream__pause-frame {
-    object-fit: fill;
+    object-fit: cover;
     width: 100%;
     height: 100%;
   }
