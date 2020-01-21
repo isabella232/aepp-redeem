@@ -1,5 +1,14 @@
 # aepp-redeem
 
+##⚠️  Deprecation notice ⚠️
+
+This app is obsolete and no longer maintained,
+the functionality has been included in the [base-aepp](https://github.com/aeternity/aepp-base) wallet
+
+
+![redeem-screenshot](redeem-screenshot.png)
+
+
 ## Project setup
 ```
 npm install
